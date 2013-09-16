@@ -312,7 +312,7 @@ define internal void @"_ZN8_$SP$u329glue_free18h2a2e3ea2e0651b7akE"({}*, { i64, 
 declare void @"_ZN8unstable4lang10local_free17hbf6638d34c91b17811v0.8$x2dpreE"({ i64, %tydesc*, i8*, i8*, i8 }*, i8*)
 
 ; Function Attrs: uwtable
-define void @_ZN9Ident_new16h4688b2c57373e544v0.0E(%struct.Ident*, { i64, %tydesc*, i8*, i8*, i8 }*) #4 {
+define void @Ident_new_outer(%struct.Ident*, { i64, %tydesc*, i8*, i8*, i8 }*) #4 {
 "function top level":
   %2 = getelementptr inbounds %struct.Ident* %0, i32 0, i32 0
   store i64 1737075661, i64* %2
@@ -320,7 +320,7 @@ define void @_ZN9Ident_new16h4688b2c57373e544v0.0E(%struct.Ident*, { i64, %tydes
 }
 
 ; Function Attrs: uwtable
-define void @_ZN10light_fuse17h67edaada43644aa74v0.0E({ i64, %tydesc*, i8*, i8*, i8 }*, { %tydesc*, { i64, %tydesc*, i8*, i8*, i8 }* }*) #4 {
+define void @light_fuse_outer({ i64, %tydesc*, i8*, i8*, i8 }*, { %tydesc*, { i64, %tydesc*, i8*, i8*, i8 }* }*) #4 {
 "function top level":
   %f = alloca { void ({ i64, %tydesc*, i8*, i8*, i8 }*)*, { i64, %tydesc*, i8*, i8*, i8 }* }
   %__closure = alloca { i64, %tydesc*, i8*, i8*, { { %tydesc*, { i64, %tydesc*, i8*, i8*, i8 }* }* } }
@@ -328,7 +328,7 @@ define void @_ZN10light_fuse17h67edaada43644aa74v0.0E({ i64, %tydesc*, i8*, i8*,
   %3 = getelementptr inbounds { i64, %tydesc*, i8*, i8*, { { %tydesc*, { i64, %tydesc*, i8*, i8*, i8 }* }* } }* %__closure, i32 0, i32 4, i32 0
   store { %tydesc*, { i64, %tydesc*, i8*, i8*, i8 }* }* %1, { %tydesc*, { i64, %tydesc*, i8*, i8*, i8 }* }** %3
   %4 = getelementptr inbounds { void ({ i64, %tydesc*, i8*, i8*, i8 }*)*, { i64, %tydesc*, i8*, i8*, i8 }* }* %f, i32 0, i32 0
-  store void ({ i64, %tydesc*, i8*, i8*, i8 }*)* @_ZN10light_fuse4anon7expr_fn2anE, void ({ i64, %tydesc*, i8*, i8*, i8 }*)** %4
+  store void ({ i64, %tydesc*, i8*, i8*, i8 }*)* @light_fuse_inner, void ({ i64, %tydesc*, i8*, i8*, i8 }*)** %4
   %5 = getelementptr inbounds { void ({ i64, %tydesc*, i8*, i8*, i8 }*)*, { i64, %tydesc*, i8*, i8*, i8 }* }* %f, i32 0, i32 1
   %6 = bitcast { i64, %tydesc*, i8*, i8*, { { %tydesc*, { i64, %tydesc*, i8*, i8*, i8 }* }* } }* %__closure to { i64, %tydesc*, i8*, i8*, i8 }*
   store { i64, %tydesc*, i8*, i8*, i8 }* %6, { i64, %tydesc*, i8*, i8*, i8 }** %5
@@ -336,28 +336,14 @@ define void @_ZN10light_fuse17h67edaada43644aa74v0.0E({ i64, %tydesc*, i8*, i8*,
   %8 = load void ({ i64, %tydesc*, i8*, i8*, i8 }*)** %7
   %9 = getelementptr inbounds { void ({ i64, %tydesc*, i8*, i8*, i8 }*)*, { i64, %tydesc*, i8*, i8*, i8 }* }* %f, i32 0, i32 1
   %10 = load { i64, %tydesc*, i8*, i8*, i8 }** %9
-  invoke void %8({ i64, %tydesc*, i8*, i8*, i8 }* %10)
-          to label %"normal return" unwind label %unwind
 
-"normal return":                                  ; preds = %"function top level"
+  call void %8({ i64, %tydesc*, i8*, i8*, i8 }* %10)
   call void @"_ZN20_$SP$bomb.$x27static9glue_drop19h9f15e2dd62f678e4asE"({}* null, { %tydesc*, { i64, %tydesc*, i8*, i8*, i8 }* }* %1)
   ret void
-
-unwind:                                           ; preds = %"function top level"
-  %11 = landingpad { i8*, i32 } personality i32 ()* @upcall_rust_personality
-          cleanup
-  call void @upcall_reset_stack_limit()
-  store { i8*, i32 } %11, { i8*, i32 }* %2
-  br label %cleanup
-
-cleanup:                                          ; preds = %unwind
-  call void @"_ZN20_$SP$bomb.$x27static9glue_drop19h9f15e2dd62f678e4asE"({}* null, { %tydesc*, { i64, %tydesc*, i8*, i8*, i8 }* }* %1)
-  %12 = load { i8*, i32 }* %2
-  resume { i8*, i32 } %12
 }
 
 ; Function Attrs: inlinehint uwtable
-define internal void @_ZN10light_fuse4anon7expr_fn2anE({ i64, %tydesc*, i8*, i8*, i8 }*) #6 {
+define internal void @light_fuse_inner({ i64, %tydesc*, i8*, i8*, i8 }*) #6 {
 "function top level":
   %__trait_callee = alloca { %tydesc*, { i64, %tydesc*, i8*, i8*, i8 }* }
   %1 = alloca %struct.Ident
@@ -379,8 +365,8 @@ define internal void @_ZN10light_fuse4anon7expr_fn2anE({ i64, %tydesc*, i8*, i8*
   %15 = load i8** %14
   %16 = bitcast i8* %15 to void ({ i64, %tydesc*, i8*, i8*, i8 }*, %struct.Ident*)*
 
-  invoke void @_ZN9Ident_new16h4688b2c57373e544v0.0E(%struct.Ident* %1, { i64, %tydesc*, i8*, i8*, i8 }* undef)
-          to label %"normal return" unwind label %unwind
+;;call void @Ident_new_outer(%struct.Ident* %1, { i64, %tydesc*, i8*, i8*, i8 }* undef)
+  invoke void @Ident_new_outer(%struct.Ident* %1, { i64, %tydesc*, i8*, i8*, i8 }* undef) to label %"normal return" unwind label %unwind
 "normal return":                                  ; preds = %"function top level"
 
   call void %16({ i64, %tydesc*, i8*, i8*, i8 }* %10, %struct.Ident* %1)
@@ -389,14 +375,7 @@ define internal void @_ZN10light_fuse4anon7expr_fn2anE({ i64, %tydesc*, i8*, i8*
 unwind:                                           ; preds = %"function top level"
   %17 = landingpad { i8*, i32 } personality i32 ()* @upcall_rust_personality
           cleanup
-  call void @upcall_reset_stack_limit()
-  store { i8*, i32 } %17, { i8*, i32 }* %2
-  br label %cleanup
-
-cleanup:                                          ; preds = %unwind
-  call void @"_ZN20_$SP$bomb.$x27static9glue_drop19h9f15e2dd62f678e4asE"({}* null, { %tydesc*, { i64, %tydesc*, i8*, i8*, i8 }* }* %__trait_callee)
-  %18 = load { i8*, i32 }* %2
-  resume { i8*, i32 } %18
+  ret void
 }
 
 ; Function Attrs: optsize
@@ -469,24 +448,10 @@ define void @_ZN4main16hfac2329d86464a44v0.0E({ i64, %tydesc*, i8*, i8*, i8 }*) 
   %10 = bitcast { %tydesc*, { i64, %tydesc*, i8*, i8*, i8 }* }* %__self to i8*
   call void @llvm.memcpy.p0i8.p0i8.i64(i8* %10, i8* %9, i64 16, i32 8, i1 false)
   call void @"_ZN20_$SP$bomb.$x27static9glue_take19h9f15e2dd62f678e4arE"({}* null, { %tydesc*, { i64, %tydesc*, i8*, i8*, i8 }* }* %__self)
-  invoke void @_ZN10light_fuse17h67edaada43644aa74v0.0E({ i64, %tydesc*, i8*, i8*, i8 }* undef, { %tydesc*, { i64, %tydesc*, i8*, i8*, i8 }* }* %__self)
-          to label %"normal return" unwind label %unwind
 
-"normal return":                                  ; preds = %"function top level"
+  call void @light_fuse_outer({ i64, %tydesc*, i8*, i8*, i8 }* undef, { %tydesc*, { i64, %tydesc*, i8*, i8*, i8 }* }* %__self)
   call void @"_ZN20_$SP$bomb.$x27static9glue_drop19h9f15e2dd62f678e4asE"({}* null, { %tydesc*, { i64, %tydesc*, i8*, i8*, i8 }* }* %b)
   ret void
-
-unwind:                                           ; preds = %"function top level"
-  %11 = landingpad { i8*, i32 } personality i32 ()* @upcall_rust_personality
-          cleanup
-  call void @upcall_reset_stack_limit()
-  store { i8*, i32 } %11, { i8*, i32 }* %1
-  br label %cleanup
-
-cleanup:                                          ; preds = %unwind
-  call void @"_ZN20_$SP$bomb.$x27static9glue_drop19h9f15e2dd62f678e4asE"({}* null, { %tydesc*, { i64, %tydesc*, i8*, i8*, i8 }* }* %b)
-  %12 = load { i8*, i32 }* %1
-  resume { i8*, i32 } %12
 }
 
 define void @_rust_main({ i64, %tydesc*, i8*, i8*, i8 }*) {
