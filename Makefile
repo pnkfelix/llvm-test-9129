@@ -1,19 +1,48 @@
-go: fold-code2.invoke fold-code2.call
+LLC=~/opt/llvm-dbg-nopt/bin/llc
+
+go-isolate: ll-isolate
+	./ll-isolate
+
+ll-isolate: isolate.ll.o
+	clang++ -o $@ -fexceptions -fcxx-exceptions $^
+
+go-simple: cxx-simple ll-simple
+	./cxx-simple
+
+cxx-simple: simple.cpp other.cpp
+	clang++ -o $@ -fexceptions -fcxx-exceptions  $^
+
+ll-simple: simple.ll.o other.ll.o
+	clang++ -o $@ -fexceptions -fcxx-exceptions $^
+
+simple.ll.s: simple.ll
+
+%.ll.s: %.ll
+	$(LLC) -o $@ $< -O0 -filetype=asm
+
+%.ll.o: %.ll.s
+	clang++ -c -o $@ $< -O0 -g
+#	$(LLC) -o $@ $< -O0 -g -filetype=obj 
+
+%.ll: %.cpp
+	clang++ -cc1 -fexceptions -fcxx-exceptions -emit-llvm $<
+
+go-fold2: fold-code2.invoke fold-code2.call
 	./fold-code2.call
 	./fold-code2.invoke
 
 # include ../Makefile.common
 fold-code%.s: fold-code%.no-opt.ll
-	llc -filetype=asm -O0 $<
+	$(LLC) -filetype=asm -O0 $<
 
 fold-code2.invoke.s: fold-code2.invoke.ll
-	llc -filetype=asm -O0 $<
+	$(LLC) -filetype=asm -O0 $<
 
 fold-code2.call.s: fold-code2.call.ll
-	llc -filetype=asm -O0 $<
+	$(LLC) -filetype=asm -O0 $<
 
 %.o: %.ll
-	llc -filetype=obj -O0 $<
+	$(LLC) -filetype=obj -O0 $<
 
 GCC_LINK_ARGS= -L/Users/fklock/Dev/Mozilla/rust.git/objdir-dbgopt/x86_64-apple-darwin/stage2/lib/rustc/x86_64-apple-darwin/lib -m64 \
                 -L/Users/fklock/Dev/Mozilla/rust.git/objdir-dbgopt/x86_64-apple-darwin/stage2/lib/rustc/x86_64-apple-darwin/lib \
